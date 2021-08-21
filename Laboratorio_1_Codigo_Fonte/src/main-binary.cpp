@@ -169,13 +169,14 @@ int main()
         int seconds = (int)glfwGetTime();
 
         for(int i = 0; i < 4; ++i) {
-            if (seconds & (int) pow(2,i)) {// 1
+            if (seconds % 2) {// 1
                 glBindVertexArray(vertex_array_object_id_1[i]);
                 glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, 0);
             } else {//0
                 glBindVertexArray(vertex_array_object_id_0[i]);
                 glDrawElements(GL_TRIANGLE_STRIP, 34, GL_UNSIGNED_BYTE, 0);
             }
+            seconds /= 2;
             glBindVertexArray(0);
         }
 
