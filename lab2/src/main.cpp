@@ -125,6 +125,10 @@ glm::vec4 camera_position_c; // Ponto "c", centro da câmera
 glm::vec4 camera_view_vector; // Vetor "view", sentido para onde a câmera está virada
 glm::vec4 camera_up_vector; // Vetor "up" fixado para apontar para o "céu" (eito Y global)
 
+float deltaTime = 0.0f;	// Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
+float currentFrame;
+
 int main()
 {
     // Inicializamos a biblioteca GLFW, utilizada para criar uma janela do
@@ -506,6 +510,10 @@ int main()
         // tudo que foi renderizado pelas funções acima.
         // Veja o link: Veja o link: https://en.wikipedia.org/w/index.php?title=Multiple_buffering&oldid=793452829#Double_buffering_in_computer_graphics
         glfwSwapBuffers(window);
+
+        currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;  
 
         // Verificamos com o sistema operacional se houve alguma interação do
         // usuário (teclado, mouse, ...). Caso positivo, as funções de callback
@@ -1055,7 +1063,8 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
         g_AngleZ += (mod & GLFW_MOD_SHIFT) ? -delta : delta;
     }
 
-    float speed = 0.05f;
+
+    float speed = 1.0f * deltaTime;
     glm::vec4 w_camera = -camera_view_vector;
     glm::vec4 u_camera = crossproduct(camera_up_vector, w_camera);
     w_camera = w_camera / norm(w_camera);
