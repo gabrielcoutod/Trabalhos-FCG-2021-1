@@ -1,0 +1,4 @@
+gcc.exe -Wall -Wno-unused-function -Wall -g -Iinclude -c "E:\CIC\aulas\Fundamentos de Computação grafica\lab2\Laboratorio_2_Codigo_Fonte\src\glad.c" -o obj\Debug\src\glad.o
+g++.exe -Wall -Wno-unused-function -Wall -std=c++11 -g -std=c++14 -Iinclude -c "E:\CIC\aulas\Fundamentos de Computação grafica\lab2\Laboratorio_2_Codigo_Fonte\src\main.cpp" -o obj\Debug\src\main.o
+g++.exe -Wall -Wno-unused-function -Wall -std=c++11 -g -std=c++14 -Iinclude -c "E:\CIC\aulas\Fundamentos de Computação grafica\lab2\Laboratorio_2_Codigo_Fonte\src\textrendering.cpp" -o obj\Debug\src\textrendering.o
+g++.exe -Llib -o bin\Debug\main.exe obj\Debug\src\glad.o obj\Debug\src\main.o obj\Debug\src\textrendering.o  lib\libglfw3.a -lgdi32 -lopengl32 lib-mingw-32\libglfw3.a -lgdi32 -lopengl32  
