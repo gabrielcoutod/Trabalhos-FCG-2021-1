@@ -129,6 +129,12 @@ float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 float currentFrame;
 
+// teclas pressionadas
+bool W_state = false;
+bool A_state = false;
+bool S_state = false;
+bool D_state = false;
+
 int main()
 {
     // Inicializamos a biblioteca GLFW, utilizada para criar uma janela do
@@ -288,6 +294,37 @@ int main()
         float y = r*sin(g_CameraPhi);
         float z = r*cos(g_CameraPhi)*cos(g_CameraTheta);
         float x = r*cos(g_CameraPhi)*sin(g_CameraTheta);
+
+        currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        float speed = 1.0f * deltaTime;
+        glm::vec4 w_camera = -camera_view_vector;
+        glm::vec4 u_camera = crossproduct(camera_up_vector, w_camera);
+        w_camera = w_camera / norm(w_camera);
+        u_camera = u_camera / norm(u_camera);
+
+        // W
+        if (W_state)
+        {
+            move += -w_camera * speed;
+        }
+        // A
+        if (A_state)
+        {
+            move += -u_camera * speed;
+        }
+        // S
+        if (S_state)
+        {
+            move += +w_camera * speed;
+        }
+        // D
+        if (D_state)
+        {
+            move += +u_camera * speed;
+        }
 
         // Abaixo definimos as varáveis que efetivamente definem a câmera virtual.
         // Veja slides 195-227 e 229-234 do documento Aula_08_Sistemas_de_Coordenadas.pdf.
@@ -510,10 +547,6 @@ int main()
         // tudo que foi renderizado pelas funções acima.
         // Veja o link: Veja o link: https://en.wikipedia.org/w/index.php?title=Multiple_buffering&oldid=793452829#Double_buffering_in_computer_graphics
         glfwSwapBuffers(window);
-
-        currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;  
 
         // Verificamos com o sistema operacional se houve alguma interação do
         // usuário (teclado, mouse, ...). Caso positivo, as funções de callback
@@ -981,7 +1014,7 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 
     if (!g_LeftMouseButtonPressed)
         return;
-    
+
     // Deslocamento do cursor do mouse em x e y de coordenadas de tela!
     float dx = xpos - g_LastCursorPosX;
     float dy = ypos - g_LastCursorPosY;
@@ -1064,32 +1097,25 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     }
 
 
-    float speed = 1.0f * deltaTime;
-    glm::vec4 w_camera = -camera_view_vector;
-    glm::vec4 u_camera = crossproduct(camera_up_vector, w_camera);
-    w_camera = w_camera / norm(w_camera);
-    u_camera = u_camera / norm(u_camera);
-
-
     // W
     if (key == GLFW_KEY_W)
     {
-        move += -w_camera * speed;
+        W_state = (action == GLFW_PRESS)? true: ((action == GLFW_RELEASE)? false: W_state);
     }
     // A
     if (key == GLFW_KEY_A)
     {
-        move += -u_camera * speed;
+        A_state = (action == GLFW_PRESS)? true: ((action == GLFW_RELEASE)? false: A_state);
     }
     // S
     if (key == GLFW_KEY_S)
     {
-        move += +w_camera * speed;
+        S_state = (action == GLFW_PRESS)? true: ((action == GLFW_RELEASE)? false: S_state);
     }
     // D
     if (key == GLFW_KEY_D)
     {
-        move += +u_camera * speed;
+        D_state = (action == GLFW_PRESS)? true: ((action == GLFW_RELEASE)? false: D_state);
     }
 
     // Se o usuário apertar a tecla espaço, resetamos os ângulos de Euler para zero.
