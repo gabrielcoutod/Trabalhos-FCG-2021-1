@@ -119,16 +119,6 @@ bool g_UsePerspectiveProjection = true;
 // Variável que controla se o texto informativo será mostrado na tela.
 bool g_ShowInfoText = true;
 
-// vars da camera
-glm::vec4 move; // vetor que representa o deslocamento da posicao inicial
-glm::vec4 camera_position_c; // Ponto "c", centro da câmera
-glm::vec4 camera_view_vector; // Vetor "view", sentido para onde a câmera está virada
-glm::vec4 camera_up_vector; // Vetor "up" fixado para apontar para o "céu" (eito Y global)
-
-float deltaTime = 0.0f;	// Time between current frame and last frame
-float lastFrame = 0.0f; // Time of last frame
-float currentFrame;
-
 // teclas pressionadas
 bool W_state = false;
 bool A_state = false;
@@ -260,6 +250,16 @@ int main()
     float z_init = r_init*cos(g_CameraPhi)*cos(g_CameraTheta);
     float x_init = r_init*cos(g_CameraPhi)*sin(g_CameraTheta);
 
+    // vars da camera
+    glm::vec4 move; // vetor que representa o deslocamento da posicao inicial
+    glm::vec4 camera_position_c; // Ponto "c", centro da câmera
+    glm::vec4 camera_view_vector; // Vetor "view", sentido para onde a câmera está virada
+    glm::vec4 camera_up_vector; // Vetor "up" fixado para apontar para o "céu" (eito Y global)
+
+
+    float speed = 1.0f; // Velocidade da câmera
+    float prev_time = (float)glfwGetTime();
+
     // Ficamos em loop, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
     {
@@ -295,35 +295,35 @@ int main()
         float z = r*cos(g_CameraPhi)*cos(g_CameraTheta);
         float x = r*cos(g_CameraPhi)*sin(g_CameraTheta);
 
-        currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-
-        float speed = 1.0f * deltaTime;
         glm::vec4 w_camera = -camera_view_vector;
         glm::vec4 u_camera = crossproduct(camera_up_vector, w_camera);
         w_camera = w_camera / norm(w_camera);
         u_camera = u_camera / norm(u_camera);
 
+        // Atualiza delta de tempo
+        float current_time = (float)glfwGetTime();
+        float delta_t = current_time - prev_time;
+        prev_time = current_time;
+
         // W
         if (W_state)
         {
-            move += -w_camera * speed;
+            move += -w_camera * speed * delta_t;
         }
         // A
         if (A_state)
         {
-            move += -u_camera * speed;
+            move += -u_camera * speed * delta_t;
         }
         // S
         if (S_state)
         {
-            move += +w_camera * speed;
+            move += +w_camera * speed * delta_t;
         }
         // D
         if (D_state)
         {
-            move += +u_camera * speed;
+            move += +u_camera * speed * delta_t;
         }
 
         // Abaixo definimos as varáveis que efetivamente definem a câmera virtual.
