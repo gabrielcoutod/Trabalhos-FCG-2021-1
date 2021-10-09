@@ -48,13 +48,12 @@ void main()
     vec4 spotV = vec4(0.0, -1.0, 0.0, 0.0);
     float spotcos = cos(30 * PI / 180.0);
 
-    vec4 vetIP = p - spotI;
-    vetIP = normalize(vetIP);
+    vec4 vetIP = normalize(p - spotI);
 
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
     vec4 l = vec4(0.0, 0.0, 0.0, 0.0);
     if (dot(vetIP,  spotV) >= spotcos) {
-        vec4 l = -vetIP;
+        l = -vetIP;
     } 
 
 
