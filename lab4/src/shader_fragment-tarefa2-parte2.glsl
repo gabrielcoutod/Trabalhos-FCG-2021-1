@@ -52,7 +52,7 @@ void main()
 
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
     vec4 l = vec4(0.0, 0.0, 0.0, 0.0);
-    if (dot(vetIP,  spotV) >= spotcos) {
+    if (dot(normalize(vetIP),  normalize(spotV)) >= spotcos) {
         l = -vetIP;
     } 
 
