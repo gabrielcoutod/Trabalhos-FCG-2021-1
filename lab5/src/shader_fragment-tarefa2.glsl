@@ -59,7 +59,8 @@ void main()
     vec4 n = normalize(normal);
 
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
-    vec4 l = normalize(vec4(1.0,1.0,0.0,0.0));
+    vec4 l0 = normalize(vec4(1.0,1.0,0.0,0.0));
+    vec4 l1 = normalize(vec4(-1.0,-1.0,0.0,0.0));
 
     // Vetor que define o sentido da câmera em relação ao ponto atual.
     vec4 v = normalize(camera_position - p);
@@ -84,7 +85,7 @@ void main()
         //   variável position_model
 
         vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
-        vec4 p_l = bbox_center + (position_model - bbox_center) / length(position_model-bbox_center);
+        vec4 p_l = bbox_center + (position_model - bbox_center)/length(position_model - bbox_center);
         vec4 p_v = p_l - bbox_center;
         float t = atan(p_v.x, p_v.z);
         float f = asin(p_v.y);
@@ -127,10 +128,10 @@ void main()
     vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
 
     // Equação de Iluminação
-    float lambert0 = max(0,dot(n,l));
-    float lambert1 = max(0,dot(-n,l));
+    float lambert0 = max(0,dot(n,l0));
+    float lambert1 = max(0,dot(n,l1));
 
-    color = Kd0 * (lambert0 + 0.01) + Kd1 * (lambert1 + 0.01);
+    color = Kd0*(lambert0 + 0.01) + Kd1*(lambert1 + 0.01);
 
     // Cor final com correção gamma, considerando monitor sRGB.
     // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
