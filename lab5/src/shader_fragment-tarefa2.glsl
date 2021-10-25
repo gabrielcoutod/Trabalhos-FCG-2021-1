@@ -131,7 +131,7 @@ void main()
     float lambert0 = max(0,dot(n,l0));
     float lambert1 = max(0,dot(n,l1));
 
-    color = Kd0*(lambert0 + 0.01) + Kd1*(lambert1 + 0.01);
+    color = Kd0*(lambert0 + 0.01) + Kd1*(lambert1);
 
     // Cor final com correção gamma, considerando monitor sRGB.
     // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
